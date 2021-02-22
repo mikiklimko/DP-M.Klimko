@@ -1,3 +1,3 @@
 module.exports = {
-    MongoURI: 'mongodb://localhost:27017/miki-registracia?retryWrites=true&w=majority'
+    MongoURI: process.env.MONGODB_URI
 }

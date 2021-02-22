@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
@@ -23,7 +24,7 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true})
 app.use(expressLayouts);
 
 app.set('view engine','ejs');
-app.set('views', path.join(__dirname, 'views')); 
+app.set('views', path.join(__dirname, 'views'));
 
 
 
