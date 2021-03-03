@@ -88,7 +88,7 @@ router.post('/login', (req, res, next) => {
     passport.authenticate('local', {
         successRedirect: '/dashboard',
         failureRedirect: '/users/login',
-        failureFlash: 'Nezadali ste email a heslo'
+        failureFlash: 'Nezadali ste email a heslo alebo vas ucet nie je verifikovany skontrolujte si email'
         })(req, res, next);
 });
 //Odhlasovanie

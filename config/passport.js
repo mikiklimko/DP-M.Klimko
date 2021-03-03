@@ -14,7 +14,11 @@ module.exports = function (passport) {
                 .then(user => {
                     if (!user) {
                         return done(null, false, { message: 'Tento email nie je zaregistrovany' });
-                    }
+                    } 
+                    //Kontola ci uzivatel urobil overenie !nevypisuje tuto chybu ale chubu z users.js pri login handle !ale nepusti uzivatela dnu 
+                    if (!user.isVerified) {
+                      return done(null, false, { message: 'Tento ucet nebol verifikovany skontrolujte email'});
+                  }; 
                     // Zhoda hesiel
                    
                     bcrypt.compare(password, user.password, (err, isMatch ) => {
@@ -26,6 +30,7 @@ module.exports = function (passport) {
                             return done(null, false, { message: 'Zadali ste nespravne heslo!'})
                         }
                     });
+                    
                 })
                 .catch(err => console.log(err));
         })
@@ -40,4 +45,6 @@ module.exports = function (passport) {
           done(err, user);
         });
       });
+
+      
 }
