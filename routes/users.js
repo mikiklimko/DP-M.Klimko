@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
 //Uzivatelsky model
 const User = require('../models/User');
@@ -46,7 +48,7 @@ router.post('/register', (req, res) => {
             .then(user => {
                 if (user) {
                     //existujuci uzivatel
-                    error.push({msg: 'Email je uz registrovany'})
+                    error.push({ msg: 'Email je uz registrovany' })
                     res.render('register', {
                         errors,
                         name,
@@ -58,30 +60,44 @@ router.post('/register', (req, res) => {
                     const newUser = new User({
                         name,
                         email,
-                        password
+                        password,
                     });
+
                     //Hash hesla
-                    bcrypt.genSalt(10, (err, salt) => 
+                    bcrypt.genSalt(10, (err, salt) =>
                         bcrypt.hash(newUser.password, salt, (err, hash) => {
-                          if (err) throw err;
-                          //Nastavenie hasovania hesla
-                          newUser.password = hash;
-                          // Ulozenue usera
-                          newUser.save()
-                          .then(user => {
-                              req.flash('success_msg', 'Si uspesne zaregistrovany');
-                              res.redirect('/users/login');
-                          })
-                          .catch(err => console.log(err));
-                    }))
-                    
+                            if (err) throw err;
+                            //Nastavenie hasovania hesla
+                            newUser.password = hash;
+                            // Ulozenue usera
+                            newUser.save()
+                                .then(user => {
+                                    req.flash('success_msg', 'Si uspesne zaregistrovany');
+                                    res.redirect('/users/login');
+                                })
+                                .catch(err => console.log(err));
+                        }))
+                    const token = jwt.sign(
+                        { email: email },
+                        'process.env.RANDOM_TOKEN_SECRET',
+                        { expiresIn: '24h' }
+
+                    );
+                    console.log(newUser);
+                    console.log(token);
+
+
+
                     //vypis uzivatela v cosole
-                   //console.log(newUser)
-                   //res.send('Ahoj');
+                    //console.log(newUser)
+                    //res.send('Ahoj');
                 }
             });
     }
 });
+
+
+
 
 //prihlasovacie handle
 router.post('/login', (req, res, next) => {
@@ -89,10 +105,10 @@ router.post('/login', (req, res, next) => {
         successRedirect: '/dashboard',
         failureRedirect: '/users/login',
         failureFlash: 'Nezadali ste email a heslo alebo vas ucet nie je verifikovany skontrolujte si email'
-        })(req, res, next);
+    })(req, res, next);
 });
 //Odhlasovanie
-router.get('/logout', (req,res) =>{
+router.get('/logout', (req, res) => {
     req.logout();
     req.flash('success_msg', 'Odhlasili ste sa');
     res.redirect('/users/login');

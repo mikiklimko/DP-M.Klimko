@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
+const nodemailer = require('nodemailer');
 
 
 const app = express();
@@ -39,6 +40,16 @@ app.use(session({
   //passport middleware
   app.use(passport.initialize());
   app.use(passport.session());
+
+//nodemailer setup
+var transportet = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.LOG_EMAIL,
+        pass: process.env.LOG_PASS
+    }
+});
+
 
 
 // Connect flash
