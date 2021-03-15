@@ -41,14 +41,7 @@ app.use(session({
   app.use(passport.initialize());
   app.use(passport.session());
 
-//nodemailer setup
-var transportet = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.LOG_EMAIL,
-        pass: process.env.LOG_PASS
-    }
-});
+
 
 
 

@@ -51,8 +51,8 @@ router.post('/register', (req, res) => {
                     error.push({ msg: 'Email je uz registrovany' })
                     res.render('register', {
                         errors,
-                        name,
-                        email,
+                        name: req.body.name,
+                        email: req.body.email,
                         password,
                         password2
                     });
@@ -83,10 +83,36 @@ router.post('/register', (req, res) => {
                         { expiresIn: '24h' }
 
                     );
+                   
+                    //nodemailer setup
+                        var transporter = nodemailer.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            user: process.env.LOG_EMAIL,
+                            pass: process.env.LOG_PASS
+                        }
+                    });
+                    var mailOptions = {
+                        from: 'dp.klimko@gmail.com',
+                        to: `${req.body.Email}`,
+                        subject: 'Sending Email using Node.js',
+                        html: `<h1>ODOSLANE SPRAVNE</h1><br> <a href="http://localhost:5000/activate?key=${token}"> Pre overenie klikny `
+                      };
+                      transporter.sendMail(mailOptions, function(error, info){
+                        if (error) {
+                          console.log(error);
+                        } else {
+                          console.log('Email sent: ' + info.response);
+                        }
+                      });
+                   
                     console.log(newUser);
                     console.log(token);
 
-
+                    /* var decoded = jwt.decode(token)
+                    var decoded = jwt.decode(token, { complete: true });
+                    console.log(decoded.header);
+                    console.log(decoded.payload) */
 
                     //vypis uzivatela v cosole
                     //console.log(newUser)
