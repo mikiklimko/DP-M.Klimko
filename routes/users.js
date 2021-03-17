@@ -84,7 +84,7 @@ router.post('/register', (req, res) => {
 
                     );
                    
-                    //nodemailer setup
+                   /*  //nodemailer setup
                         var transporter = nodemailer.createTransport({
                         service: 'gmail',
                         auth: {
@@ -96,7 +96,7 @@ router.post('/register', (req, res) => {
                         from: 'dp.klimko@gmail.com',
                         to: `${req.body.Email}`,
                         subject: 'Sending Email using Node.js',
-                        html: `<h1>ODOSLANE SPRAVNE</h1><br> <a href="http://localhost:5000/activate?key=${token}"> Pre overenie klikny `
+                        html: `<h1>ODOSLANE SPRAVNE</h1><br> <a href="http://localhost:5000/activate?key=${token}"> Pre overenie klikni `
                       };
                       transporter.sendMail(mailOptions, function(error, info){
                         if (error) {
@@ -104,7 +104,7 @@ router.post('/register', (req, res) => {
                         } else {
                           console.log('Email sent: ' + info.response);
                         }
-                      });
+                      }); */
                    
                     console.log(newUser);
                     console.log(token);

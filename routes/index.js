@@ -10,4 +10,12 @@ res.render('dashboard', {
     name: req.user.name
 }));
 
+router.get('/upload', ensureAuthenticated, (req,res) => res.render('upload', {
+    name: req.user.name
+}));
+
+
+
+
+
 module.exports = router;

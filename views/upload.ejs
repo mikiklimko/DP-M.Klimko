@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+        integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://bootswatch.com/4/journal/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/style/style.css">
+    <title>Miki Klimko</title>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+            aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <a class="navbar-brand">Konferencia XY</a>
+
+        <div class=" collapse navbar-collapse container-fluid" id="navbarTogglerDemo03">
+            <ul class="navbar-nav mr-auto ">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item  active">
+                    <a class="nav-link">Upload<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <ul class="navbar-nav  navbar-right">
+                <li class="nav-item">
+                    <a class="nav-link" href="dashboard"><span class="fas fa-user"></span><%= name %></a>
+                </li>
+                <li>
+                    <a href="/users/logout" class="btn btn-secondary">Odhlasenie</a>
+                </li>
+                
+
+
+            </ul>
+
+        </div>
+
+    </nav>
+    <br>
+    <br>
+    <br>
+
+
+    <h2>Upravit Upload dostupnost len po prihlaseni, takisto zmenit dashboard nech sa zobrazi v menu po prihlaseni</h2>
+
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 m-auto">
+                <h1 class="text-center display-6">Nahravanie a stahovanie suborov:</h1>
+                <form action="/save" method="POST" enctype="multipart/form-data">
+                <div class="custom-file mb-3">
+                    <input type="file" name="file" id="file" class="custom-file-input">
+                    <label for="file" class="custom-file-label">Vyberte subor</label>
+                </div>
+                <div class="custom-text">
+                    <p class="display-8">Vlozte abstrakt:</p>
+                    <textarea name="abstrakt" id="abstrakt" cols="71" rows="2"></textarea>
+
+                </div>
+                <input type="submit" value="Odoslat" class="btn btn-primary btn-block">
+                
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
