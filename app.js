@@ -6,6 +6,7 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
 const nodemailer = require('nodemailer');
+const path = require('path');
 
 
 const app = express();

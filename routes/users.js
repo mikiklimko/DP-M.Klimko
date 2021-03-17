@@ -8,6 +8,7 @@ const nodemailer = require('nodemailer');
 //Uzivatelsky model
 const User = require('../models/User');
 
+
 //Prihlasenie
 router.get('/login', (req, res) => res.render('login'));
 
@@ -51,16 +52,22 @@ router.post('/register', (req, res) => {
                     error.push({ msg: 'Email je uz registrovany' })
                     res.render('register', {
                         errors,
-                        name: req.body.name,
-                        email: req.body.email,
+                        name,
+                        email,
                         password,
                         password2
                     });
                 } else {
+                    const token = jwt.sign(
+                        { email: email },
+                        'process.env.RANDOM_TOKEN_SECRET',
+                        { expiresIn: '24h' }
+                    );
                     const newUser = new User({
                         name,
                         email,
                         password,
+                        token,
                     });
 
                     //Hash hesla
@@ -77,14 +84,10 @@ router.post('/register', (req, res) => {
                                 })
                                 .catch(err => console.log(err));
                         }))
-                    const token = jwt.sign(
-                        { email: email },
-                        'process.env.RANDOM_TOKEN_SECRET',
-                        { expiresIn: '24h' }
-
-                    );
-                   
-                   /*  //nodemailer setup
+                    
+                    console.log(token);
+                    
+                    //nodemailer setup
                         var transporter = nodemailer.createTransport({
                         service: 'gmail',
                         auth: {
@@ -92,11 +95,12 @@ router.post('/register', (req, res) => {
                             pass: process.env.LOG_PASS
                         }
                     });
+                    console.log(transporter)
                     var mailOptions = {
                         from: 'dp.klimko@gmail.com',
-                        to: `${req.body.Email}`,
+                        to: `${email}`,
                         subject: 'Sending Email using Node.js',
-                        html: `<h1>ODOSLANE SPRAVNE</h1><br> <a href="http://localhost:5000/activate?key=${token}"> Pre overenie klikni `
+                        html: `<h1>ODOSLANE SPRAVNE</h1><br> <a href="http://localhost:5000/users/verify?key=${token}"> Pre overenie klikni `
                       };
                       transporter.sendMail(mailOptions, function(error, info){
                         if (error) {
@@ -104,10 +108,10 @@ router.post('/register', (req, res) => {
                         } else {
                           console.log('Email sent: ' + info.response);
                         }
-                      }); */
+                      });
                    
-                    console.log(newUser);
-                    console.log(token);
+                    /* console.log(newUser);
+                    console.log(token); */
 
                     /* var decoded = jwt.decode(token)
                     var decoded = jwt.decode(token, { complete: true });
@@ -139,6 +143,44 @@ router.get('/logout', (req, res) => {
     req.flash('success_msg', 'Odhlasili ste sa');
     res.redirect('/users/login');
 });
+
+router.get('/verify', (req, res) => {
+    const token = req.query.key;
+    var decoded = jwt.decode(token);
+    console.log(decoded);
+    User.findOne({ token: token })
+    .then(user => {
+        console.log(user);
+        if(user.email === decoded.email){
+            // TODO decoded.exp aktualny cas(iat) > expirovany cas(exp) (pozor exp je asi v sec)
+            // TODO set user isVerified: true,
+            // TODO logni ho
+            // TODO setnut token ""
+            console.log("ano verifikujeme")
+           
+            User.findOneAndUpdate(
+                {email: user.email},
+                {$set: {"name": "hello"}});
+                console.log(user.email);
+                
+           /* const email = user.email;
+            User.updateOne( {email: email},
+               {$set: {isVerified : true}});
+           
+            console.log(user); */
+
+        } else {
+
+            console("chyba")
+            //TODO chyba z endpointu
+        }
+
+    });
+    /* res.send(token); */
+    /* res.json(decoded); */
+    req.flash('success_msg', 'Verifikoval si sa');
+                res.redirect('/login')
+    });
 
 
 module.exports = router;
