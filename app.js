@@ -5,17 +5,10 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
-const path = require('path');
-const crypto = require('crypto');
-const multer = require('multer');
-const GridFsStorage = require('multer-gridfs-storage');
-const Grid = require('gridfs-stream');
-const methodOverride = require('method-override');
-const bodyParser = require('body-parser');
-
+const nodemailer = require('nodemailer');
 
 const app = express();
-
+const X = 22;
 //Passport konfik
 require('./config/passport')(passport);
 
@@ -23,40 +16,28 @@ require('./config/passport')(passport);
 const db = require('./config/keys').MongoURI;
 
 //pripojenie na mongo
-const conn = mongoose.createConnection(db, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(db, {  useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => console.log('Databaza pripojena'))
     .catch(err => console.log(err));
 
 //EJS
-app.use(bodyParser.json);
-app.use(methodOverride('_method'));
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
 // app.set('views', path.join(__dirname, 'viewss'));
 
-//Init gfs
-let gfs;
-
-
-
-  
-//
-
-
 //Bodyparser
 app.use(express.urlencoded({ extended: false }));
-
 
 //Express session
 app.use(session({
     secret: 'secret',
     resave: true,
     saveUninitialized: true
-  }));
+}));
 
-  //passport middleware
-  app.use(passport.initialize());
-  app.use(passport.session());
+//passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // Connect flash
@@ -73,6 +54,7 @@ app.use((req, res, next) => {
 //routes
 app.use('/', require('./routes/index.js'));
 app.use('/users', require('./routes/users.js'));
+app.use('/upload', require('./routes/upload.js'));
 
 
 const PORT = process.env.PORT || 5000;
