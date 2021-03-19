@@ -9,7 +9,7 @@ router.get('/dashboard', ensureAuthenticated, (req, res) =>
 res.render('dashboard', {
     name: req.user.name
 }));
-
+//Vkladanie suborov
 router.get('/upload', ensureAuthenticated, (req,res) => res.render('upload', {
     name: req.user.name
 }));

@@ -5,8 +5,13 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
-const nodemailer = require('nodemailer');
 const path = require('path');
+const crypto = require('crypto');
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+const methodOverride = require('method-override');
+const bodyParser = require('body-parser');
 
 
 const app = express();
@@ -18,14 +23,25 @@ require('./config/passport')(passport);
 const db = require('./config/keys').MongoURI;
 
 //pripojenie na mongo
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+const conn = mongoose.createConnection(db, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Databaza pripojena'))
     .catch(err => console.log(err));
 
 //EJS
+app.use(bodyParser.json);
+app.use(methodOverride('_method'));
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
 // app.set('views', path.join(__dirname, 'viewss'));
+
+//Init gfs
+let gfs;
+
+
+
+  
+//
+
 
 //Bodyparser
 app.use(express.urlencoded({ extended: false }));
@@ -41,9 +57,6 @@ app.use(session({
   //passport middleware
   app.use(passport.initialize());
   app.use(passport.session());
-
-
-
 
 
 // Connect flash
