@@ -28,7 +28,29 @@ const UserSchema = new mongoose.Schema({
     token: {
         type: String,
         required: false
+    },
+    adresa:{
+        type: String,
+        required: false,
+        default: "none"
+    },
+    mesto:{
+        type: String,
+        required: false,
+        default: "none"
+    },
+    PSC: {
+        type: Number,
+        required: false,
+        default: "0"
+    },
+    telefon:{
+        type: Number,
+        required: false,
+        default: "0"
     }
+
+
 });
 
 const User = mongoose.model('User', UserSchema);

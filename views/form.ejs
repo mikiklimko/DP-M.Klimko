@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+        integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://bootswatch.com/4/journal/bootstrap.min.css">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+</head>
+
+<body>
+
+
+
+    <title>Miki Klimko</title>
+
+    </head>
+
+    <body>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand">Konferencia XY</a>
+
+            <div class=" collapse navbar-collapse container-fluid" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto ">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Domov</a>
+                    </li>
+                    <li class="nav-item  active">
+                        <a class="nav-link">Súbory<span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav  navbar-right">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard"><span class="fas fa-user"></span><%= name %></a>
+                    </li>
+                    <li>
+                        <a href="/users/logout" class="btn btn-secondary">Odhlasenie</a>
+                    </li>
+
+
+
+                </ul>
+
+            </div>
+
+        </nav>
+        <br>
+        <br>
+        <br>
+
+        <div class="row mt-5">
+            <div class="col-md-8 m-auto">
+                <div class="card card-body">
+                    <h1 class="text-center mb-3">
+                        <i class="fas fa-clipboard"></i>
+                        <p class="lead m-3"><%= email %></p>
+                    </h1>
+                    <%- include('./partials/messages.ejs'); -%>
+                        <form action="/users/form" method="POST">
+                            <div class="form-group">
+                                <label for="adresa">Adresa</label>
+                                <input type="adresa" class="form-control" name="adresa" id="adresa"
+                                    placeholder="Park Angelinum 17"
+                                    value="<%= typeof adresa != 'undefined' ? adresa : '' %>">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="mesto">Mesto</label>
+                                    <input type="mesto" class="form-control" id="mesto" name="mesto" placeholder="Kosice"
+                                        value="<%= typeof mesto != 'undefined' ? mesto : '' %>">
+                                </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="PSC">PSČ</label>
+                                    <input type="psc" class="form-control" id="PSC" name="PSC" placeholder="04001"
+                                        value="<%= typeof PSC != 'undefined' ? PSC : '' %>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="telefon">Telefonne číslo</label>
+                                <input type="telefon" class="form-control" placeholder="+421 000 000 000" id="telefon"
+                                    name="telefon" required
+                                    value="<%= typeof telefon != 'undefined' ? telefon : '' %>">
+
+                            </div>
+                            <div class="form-group">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="GroupName2" name="RadioGroupName"
+                                        class="custom-control-input">
+                                    <label class="custom-control-label" for="GroupName2">Nepotrebujem ubytovanie</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="GroupName1" name="RadioGroupName"
+                                        class="custom-control-input" onclick="ShowRadioButtonDiv('GroupName', 3)">
+                                    <label class="custom-control-label" for="GroupName1">Potrebujem ubytovanie</label>
+                                    <DIV ID="GroupName1Div" STYLE="display:none;">
+                                        <div class="form-group">
+                                            <br>
+                                            <label for="exampleSelect1">Počet noci:</label>
+                                            <select class="form-control" id="exampleSelect1">
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                            </select>
+                                        </div>
+                                    </DIV>
+
+                                </div>
+                                <div class="form-group">
+                                    <br>
+                                    <label for="exampleSelect1">Strava</label>
+                                    <select class="form-control" id="exampleSelect1">
+                                        <option>Bez stravi</option>
+                                        <option>Polpenzia</option>
+                                        <option>Plná penzia</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Odoslat</button>
+                        </form>
+                </div>
+            </div>
+        </div>
+        <SCRIPT>
+            function ShowRadioButtonDiv(IdBaseName, NumberOfButtons) {
+                for (x = 1; x <= NumberOfButtons; x++) {
+                    CheckThisButton = IdBaseName + x;
+                    ThisDiv = IdBaseName + x + 'Div';
+                    if (document.getElementById(CheckThisButton).checked) {
+                        document.getElementById(ThisDiv).style.display = "block";
+                    }
+                    else {
+                        document.getElementById(ThisDiv).style.display = "none";
+                    }
+                }
+                return false;
+            }
+        </SCRIPT>
+    </body>
+
+</html>

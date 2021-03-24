@@ -4,16 +4,23 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const { ensureAuthenticated } = require('../config/auth');
+
 
 //Uzivatelsky model
 const User = require('../models/User');
-
 
 //Prihlasenie
 router.get('/login', (req, res) => res.render('login'));
 
 //Registracia
 router.get('/register', (req, res) => res.render('register'));
+
+router.get('/form', ensureAuthenticated, (req, res) => 
+res.render('form', {
+    name: req.user.name,
+    email: req.user.email
+}));
 
 //Registracia Handle
 
@@ -153,17 +160,17 @@ router.get('/verify', (req, res) => {
             console.log(user);
             if (user.email === decoded.email) {
                 // TODO decoded.exp aktualny cas(iat) > expirovany cas(exp) (pozor exp je asi v sec)
-               
+
                 // TODO setnut token ""
                 console.log("verifikujeme")
-                var filter = {email: user.email};
-                var update = {$set: {isVerified: true} };
-                User.updateOne(filter, update, (err,res)=>{
+                var filter = { email: user.email };
+                var update = { $set: { isVerified: true } };
+                User.updateOne(filter, update, (err, res) => {
                     if (err) throw err;
                     console.log("aktualizovana db")
-                    })
+                })
 
-            
+
 
             } else {
 
@@ -172,10 +179,34 @@ router.get('/verify', (req, res) => {
             }
 
         });
-    
+
     req.flash('success_msg', 'Verifikoval si sa');
     res.redirect('/users/login')
 });
 
+router.post('/form', (req, res) => {
+    const { adresa, mesto, PSC, telefon } = req.body;  
+    let errors = [];
+    if (!adresa || !mesto || !PSC || !telefon) {
+        errors.push({ msg: 'Vyplnte vsetky polia! ' });
+    }
+    if (errors.length > 0) {
+        res.render('form', {
+            errors,
+            adresa,
+            mesto,
+            PSC,
+            telefon
+        });
+    } else {
+        
+        
+
+        
+
+
+    }
+
+});
 
 module.exports = router;
