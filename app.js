@@ -23,13 +23,14 @@ require('./config/passport')(passport);
 const db = require('./config/keys').MongoURI;
 
 //pripojenie na mongo
-const conn =  mongoose.connect  (db, {  useNewUrlParser: true, useUnifiedTopology: true})
+/* const conn =  */
+ mongoose.connect  (db, {  useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => console.log('Databaza pripojena'))
     .catch(err => console.log(err));
 
 //EJS
-app.use(bodyParser.json());
-app.use(methodOverride('_method'));
+/* app.use(bodyParser.json());
+app.use(methodOverride('_method')); */
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
 // app.set('views', path.join(__dirname, 'viewss'));
@@ -37,7 +38,7 @@ app.set('view engine', 'ejs');
 //Bodyparser
 app.use(express.urlencoded({ extended: false }));
 
-let gfs;
+/* let gfs;
 console.log(conn);
  conn.then('open', () => {
     // Init stream
@@ -63,7 +64,7 @@ console.log(conn);
     }
   });
   const upload = multer({ storage });
-
+ */
  
 
 //Express session
