@@ -31,23 +31,27 @@ const UserSchema = new mongoose.Schema({
     },
     adresa:{
         type: String,
-        required: false,
         default: "none"
     },
     mesto:{
         type: String,
-        required: false,
         default: "none"
     },
     PSC: {
-        type: Number,
-        required: false,
+        type: String,
         default: "0"
     },
     telefon:{
-        type: Number,
-        required: false,
+        type: String,
         default: "0"
+    },
+    ubytovanie:{
+        type: String,
+        default: "none"
+    },
+    strava:{
+        type: String,
+        defailt: "none"
     }
 
 

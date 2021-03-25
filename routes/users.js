@@ -185,7 +185,7 @@ router.get('/verify', (req, res) => {
 });
 
 router.post('/form', (req, res) => {
-    const { adresa, mesto, PSC, telefon } = req.body;  
+    const { adresa, mesto, PSC, telefon, ubytovanie, strava } = req.body;  
     let errors = [];
     if (!adresa || !mesto || !PSC || !telefon) {
         errors.push({ msg: 'Vyplnte vsetky polia! ' });
@@ -196,17 +196,26 @@ router.post('/form', (req, res) => {
             adresa,
             mesto,
             PSC,
-            telefon
-        });
+            telefon,
+            ubytovanie,
+            strava
+            });
     } else {
-        
-        
-
-        
-
-
-    }
+        // TODO vo form nastavit ubytovanie, vypisuje len On
+        const email = req.user.email;
+        console.log(email);
+       var filter = {email : email}
+       var update = {$set :{ adresa: adresa, mesto: mesto, PSC: PSC, telefon: telefon, ubytovanie: ubytovanie, strava: strava}}
+        User.updateOne(filter, update, (err,res) => {
+            if (err) throw err;
+            console.log("Doplnenie DB")
+        })
+       console.log(adresa,mesto,PSC,telefon,ubytovanie, strava);
+        req.flash('success_msg', 'Dakujeme za vyplnenie');
+        res.redirect('/users/form')
+        }
 
 });
+
 
 module.exports = router;
