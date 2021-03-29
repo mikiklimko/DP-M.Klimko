@@ -34,12 +34,23 @@
 <br>
 
 <div class="jumbotron">
-    <h1 class="display-3">Profil uzivatela</h1>
-    <p class="lead m-3"><%= name %></p>
-    <hr class="my-4">
-    <p>Vyber si stravu a ubytovanie</p>
-    <p class="lead">
+    
+ 
+      
+      <% if (email === process.env.ADMIN ) { %>
+        <h1 class="display-3">ADMIN</h1>
+        <p>Pozriet si uzivatelov a ich poziadavky</p>
+       <a class="btn btn-primary btn-lg" href="customers" role="button">Uživatela</a> 
+      <% } else { %>
+        <h1 class="display-3">Profil uzivatela</h1>
+        <p class="lead m-3"><%= name %></p>
+        <hr class="my-4">
+        <p>Vyber si stravu a ubytovanie</p>
+        <p class="lead">
       <a class="btn btn-primary btn-lg" href="/users/form" role="button">Formular</a>
+       <% } %>
+
+      <%- include('./partials/messages.ejs'); -%>
     </p>
   </div>
 <!-- <h1 class="mt-4">Dashboard</h1>

@@ -33,7 +33,7 @@ const db = require('./config/keys').MongoURI;
 app.use(methodOverride('_method')); */
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
-// app.set('views', path.join(__dirname, 'viewss'));
+
 
 //Bodyparser
 app.use(express.urlencoded({ extended: false }));

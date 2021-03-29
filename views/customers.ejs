@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"> Meno a Priezvisko</th>
+                <th scope="col"> Email</th>
+                <th scope="col"> Tel. čislo</th>
+                <th scope="col"> Ubytovanie</th>
+                <th scope="col"> Strava</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        <%userList.forEach(users=> {%>
+            <tr>
+            <th scope="row"><%= users.name %></th>
+            <td><%= users.email %></td>
+            <td><%= users.telefon %></td>
+            <td><%= users.ubytovanie %></td>
+            <td><%= users.strava %></td>
+
+                
+           
+                
+            
+        </tr>
+            <%});%>
+        </tbody>    
+    </table>
+</body>
+
+</html>

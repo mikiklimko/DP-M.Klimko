@@ -51,7 +51,7 @@ const UserSchema = new mongoose.Schema({
     },
     strava:{
         type: String,
-        defailt: "none"
+        default: "none"
     }
 
 

@@ -116,18 +116,6 @@ router.post('/register', (req, res) => {
                             console.log('Email sent: ' + info.response);
                         }
                     });
-
-                    /* console.log(newUser);
-                    console.log(token); */
-
-                    /* var decoded = jwt.decode(token)
-                    var decoded = jwt.decode(token, { complete: true });
-                    console.log(decoded.header);
-                    console.log(decoded.payload) */
-
-                    //vypis uzivatela v cosole
-                    //console.log(newUser)
-                    //res.send('Ahoj');
                 }
             });
     }
@@ -150,7 +138,7 @@ router.get('/logout', (req, res) => {
     req.flash('success_msg', 'Odhlasili ste sa');
     res.redirect('/users/login');
 });
-
+// Verifikacia po kliknuti
 router.get('/verify', (req, res) => {
     const token = req.query.key;
     var decoded = jwt.decode(token);
@@ -183,7 +171,7 @@ router.get('/verify', (req, res) => {
     req.flash('success_msg', 'Verifikoval si sa');
     res.redirect('/users/login')
 });
-
+//Formular a aktualizacia DB
 router.post('/form', (req, res) => {
     const { adresa, mesto, PSC, telefon, ubytovanie, strava } = req.body;  
     let errors = [];
@@ -201,7 +189,6 @@ router.post('/form', (req, res) => {
             strava
             });
     } else {
-        // TODO vo form nastavit ubytovanie, vypisuje len On
         const email = req.user.email;
         console.log(email);
        var filter = {email : email}
@@ -216,6 +203,8 @@ router.post('/form', (req, res) => {
         }
 
 });
+//Vypisovanie ucastnikov
+
 
 
 module.exports = router;
