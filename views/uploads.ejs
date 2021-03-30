@@ -10,7 +10,11 @@
 
     <link rel="stylesheet" href="/style/style.css">
     <title>Miki Klimko</title>
-
+    <style>
+        img {
+          width: 100%;
+        }
+      </style>
 </head>
 
 <body>
@@ -63,7 +67,7 @@
                     <input type="file" name="file" id="file" class="custom-file-input">
                     <label for="file" class="custom-file-label">Vyberte subor</label>
                 </div>
-                <div class="custom-text">
+                <!-- <div class="custom-text">
                     <p class="display-8">Vlozte abstrakt:</p>
                     <textarea type="abstrakt" name="abstrakt" id="abstrakt" cols="71" rows="2"></textarea>
 
@@ -72,27 +76,29 @@
                     <p class="display-8">Klucove slova:</p>
                     <textarea type="keyworlds" name="keyworlds" id="keyworlds" cols="71" rows="1"></textarea>
 
-                </div>
+                </div> -->
                 <input type="submit" value="Odoslat" class="btn btn-primary btn-block">
-                
                 </form>
                 <hr>
-                   <% if(files){ %>
-                  <% files.forEach(function(file) { %>
-                <div class="card card-body mb-3">
-                <% if(file.isImage) { %>
-                <img src="image/<%= file.filename %>" alt="">
-                    <% } else { %>
-                     <%= file.filename %>
-                     <% } %>
-                      <form method="POST" action="/files/<%= file._id %>?_method=DELETE">
-                        <button class="btn btn-danger btn-block mt-4">Delete</button>
-                      </form>
-            </div>
-            <% }) %>
-              <% } else { %>
-                <p>No files to show</p>
-                <% } %>
+                <% if(files){ %>
+                    <% files.forEach(function(file) { %>
+                      <div class="card card-body mb-3">
+                        <% if(file.isImage) { %>
+                          <img src="image/<%= file.filename %>" alt="">
+                          <% } else { %>
+                            <%= file.filename %>
+                              <% } %>
+                                <form method="POST" action="/files/<%= file._id %>?_method=DELETE">
+                                  <button class="btn btn-danger btn-block mt-4">Delete</button>
+                                </form>
+                                <form method="GET" action="/files/<%= file._id %>?_method=DOWNLOAD">
+                                    <button class="btn btn-danger btn-block mt-4">Stiahnut</button>
+                                  </form>
+                      </div>
+                      <% }) %>
+                        <% } else { %>
+                          <p>No files to show</p>
+                          <% } %>
             </div>
         </div>
     </div>

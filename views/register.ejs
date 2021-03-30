@@ -9,11 +9,8 @@
   <div class=" collapse navbar-collapse container-fluid" id="navbarTogglerDemo03" >
       <ul class="navbar-nav mr-auto ">
           <li class="nav-item">
-              <a class="nav-link" href="/">Home</a>
+              <a class="nav-link" href="/">Domov</a>
           </li>
-          <!-- <li class="nav-item ">
-              <a class="nav-link" href="/upload">Upload</a>
-          </li> -->
       </ul>
       <ul class="navbar-nav  navbar-right ">
           <li class="nav-item active">
@@ -40,29 +37,29 @@
       <%- include('./partials/messages.ejs'); -%>
       <form action="/users/register" method="POST">
         <div class="form-group">
-          <label for="name">Meno</label>
+          <label for="name">Meno a priezvisko:</label>
           <input
             type="name"
             id="name"
             name="name"
             class="form-control"
-            placeholder="Meno"
+            placeholder="Meno Priezvisko"
             value="<%= typeof name != 'undefined' ? name : '' %>"
           />
         </div>
         <div class="form-group">
-          <label for="email">Email</label>
+          <label for="email">Email:</label>
           <input
             type="email"
             id="email"
             name="email"
             class="form-control"
-            placeholder="Email "
+            placeholder="Email@Email.com"
             value="<%= typeof email != 'undefined' ? email : '' %>"
           />
         </div>
         <div class="form-group">
-          <label for="password">Heslo</label>
+          <label for="password">Heslo:</label>
           <input
             type="password"
             id="password"
@@ -73,7 +70,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="password2">Overenie Hesla</label>
+          <label for="password2">Overenie Hesla:</label>
           <input
             type="password"
             id="password2"
@@ -87,7 +84,7 @@
           Registrovat sa
         </button>
       </form>
-      <p class="lead mt-4">Mate uz ucet? <a href="/users/login">Prihlasit sa</a></p>
+      <p class="lead mt-4"><b>Ste už zaregistrovaný?</b> <a href="/users/login"><b>Prihlasite sa</b></a></p>
     </div>
   </div>
 </div>

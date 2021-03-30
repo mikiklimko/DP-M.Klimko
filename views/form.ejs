@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
         integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
     <link rel="stylesheet" href="https://bootswatch.com/4/journal/bootstrap.min.css">
@@ -12,84 +13,79 @@
 
 <body>
 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+            aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
+        <a class="navbar-brand">Konferencia XY</a>
 
-    <title>Miki Klimko</title>
-
-    </head>
-    <body>
-
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
-                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <a class="navbar-brand">Konferencia XY</a>
-
-            <div class=" collapse navbar-collapse container-fluid" id="navbarTogglerDemo03">
-                <ul class="navbar-nav mr-auto ">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Domov</a>
-                    </li>
-                    <li class="nav-item  active">
-                        <a class="nav-link">Súbory<span class="sr-only">(current)</span></a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav  navbar-right">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/dashboard"><span class="fas fa-user"></span><%= name %></a>
-                    </li>
-                    <li>
-                        <a href="/users/logout" class="btn btn-secondary">Odhlasenie</a>
-                    </li>
+        <div class=" collapse navbar-collapse container-fluid" id="navbarTogglerDemo03">
+            <ul class="navbar-nav mr-auto ">
+                <li class="nav-item">
+                    <a class="nav-link" href="/home">Domov</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/uploads">Nahrávanie súborov<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <ul class="navbar-nav  navbar-right">
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard"><span class="fas fa-user"></span>
+                        <%= name %>
+                    </a>
+                </li>
+                <li>
+                    <a href="/users/logout" class="btn btn-secondary">Odhlasenie</a>
+                </li>
 
 
 
-                </ul>
+            </ul>
 
-            </div>
+        </div>
 
-        </nav>
-        <br>
-        <br>
-        <br>
+    </nav>
+    <br>
+    <br>
+    <br>
 
-        <div class="row mt-5">
-            <div class="col-md-8 m-auto">
-                <div class="card card-body">
-                    <h1 class="text-center mb-3">
-                        <i class="fas fa-clipboard"></i>
-                        <p class="lead m-3"></p>
-                    </h1>
-                    <%- include('./partials/messages.ejs'); -%>
-                        <form action="/users/form" method="POST">
-                            <div class="form-group">
-                                <label for="adresa">Adresa</label>
-                                <input type="adresa" class="form-control" name="adresa" id="adresa"
-                                    placeholder="Park Angelinum 17"
-                                    value="<%= typeof adresa != 'undefined' ? adresa : '' %>">
+    <div class="row mt-5">
+        <div class="col-md-8 m-auto">
+            <div class="card card-body">
+                <h1 class="text-center mb-3">
+                    <i class="fas fa-clipboard"></i>
+                    <p class="lead m-3"></p>
+                </h1>
+                <%- include('./partials/messages.ejs'); -%>
+                    <form action="/users/form" method="POST">
+                        <div class="form-group">
+                            <label for="adresa">Adresa</label>
+                            <input type="adresa" class="form-control" name="adresa" id="adresa"
+                                placeholder="Park Angelinum 17"
+                                value="<%= typeof adresa != 'undefined' ? adresa : '' %>">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="mesto">Mesto</label>
+                                <input type="mesto" class="form-control" id="mesto" name="mesto" placeholder="Kosice"
+                                    value="<%= typeof mesto != 'undefined' ? mesto : '' %>">
                             </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="mesto">Mesto</label>
-                                    <input type="mesto" class="form-control" id="mesto" name="mesto"
-                                        placeholder="Kosice" value="<%= typeof mesto != 'undefined' ? mesto : '' %>">
-                                </div>
 
-                                <div class="form-group col-md-2">
-                                    <label for="PSC">PSČ</label>
-                                    <input type="psc" class="form-control" id="PSC" name="PSC" placeholder="04001"
-                                        value="<%= typeof PSC != 'undefined' ? PSC : '' %>">
-                                </div>
+                            <div class="form-group col-md-2">
+                                <label for="PSC">PSČ</label>
+                                <input type="psc" class="form-control" id="PSC" name="PSC" placeholder="04001"
+                                    value="<%= typeof PSC != 'undefined' ? PSC : '' %>">
                             </div>
-                            <div class="form-group">
-                                <label class="col-form-label" for="telefon">Telefonne číslo</label>
-                                <input type="telefon" class="form-control" placeholder="+421 000 000 000" id="telefon"
-                                    name="telefon" required value="<%= typeof telefon != 'undefined' ? telefon : '' %>">
+                        </div>
+                        <div class="form-group">
+                            <label class="col-form-label" for="telefon">Telefonne číslo</label>
+                            <input type="telefon" class="form-control" placeholder="+421 000 000 000" id="telefon"
+                                name="telefon" required value="<%= typeof telefon != 'undefined' ? telefon : '' %>">
 
-                            </div>
-                            <!-- <div class="form-group">
+                        </div>
+                        <!-- <div class="form-group">
 
 
                                 <label>
@@ -107,52 +103,32 @@
                                     </select>
                                 </div>
                             </div> -->
-                            <div class="form-group">
-                                <br>
-                                <label for="strava">Ubytovanie:</label>
-                                <select class="form-control" id="ubytovanie" name="ubytovanie">
-                                    <option value="Bez ubytovania">Bez ubytovania</option>
-                                    <option value="1 noc"> Ubytovanie na 1 noc</option>
-                                    <option value="2 noci"> Ubytovanie na 2 noci</option>
-                                    <option value="3 noci"> Ubytovanie na 3 noci</option>
-                                </select>
-                            </div>
-                        
-                            <div class="form-group">
-                                <br>
-                                <label for="strava">Strava:</label>
-                                <select class="form-control" id="strava" name="strava">
-                                    <option value="Bez stravy"> Bez stravy</option>
-                                    <option value="Polpenzia"> Polpenzia</option>
-                                    <option value="Plna penzia"> Plná Penzia</option>
-                                </select>
-                            </div>
-                </div>
+                        <div class="form-group">
+                            <br>
+                            <label for="strava">Ubytovanie:</label>
+                            <select class="form-control" id="ubytovanie" name="ubytovanie">
+                                <option value="Bez ubytovania">Bez ubytovania</option>
+                                <option value="1 noc"> Ubytovanie na 1 noc</option>
+                                <option value="2 noci"> Ubytovanie na 2 noci</option>
+                                <option value="3 noci"> Ubytovanie na 3 noci</option>
+                            </select>
+                        </div>
 
-                <button type="submit" class="btn btn-primary">Odoslat</button>
-                </form>
+                        <div class="form-group">
+                            <br>
+                            <label for="strava">Strava:</label>
+                            <select class="form-control" id="strava" name="strava">
+                                <option value="Bez stravy"> Bez stravy</option>
+                                <option value="Polpenzia"> Polpenzia</option>
+                                <option value="Plna penzia"> Plná Penzia</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Odoslat</button>
             </div>
+            </form>
         </div>
-        </div>
-
-
-
-
-
-<!-- 
-        <SCRIPT>
-            $(function () {
-                $('input[name=ubytovanie]').on('click init-ubytovanie', function () {
-                    $('#ubytovanie1').toggle($('#ubytovanie1-gallery').prop('checked'));
-                }).trigger('init-ubytovanie');
-            });
-            function getSelectValue() {
-                var selectedValue = document.getElementById("ubytovanie1").value;               
-            }
-
-
-
-        </SCRIPT> -->
-    </body>
+    </div>
+    </div>
+</body>
 
 </html>

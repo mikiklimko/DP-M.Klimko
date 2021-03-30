@@ -1,25 +1,39 @@
 const express = require('express');
-const MulterGridfsStorage = require('multer-gridfs-storage');
+const mongoose = require('mongoose');
+const path = require('path');
+const crypto = require('crypto');
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
+const methodOverride = require('method-override');
 const router = express.Router();
 
 const { ensureAuthenticated } = require('../config/auth');
 
 
 
+
 //Uvitacia strana
 router.get('/', (req, res) => res.render('Welcome'));
 
+router.get('/home', ensureAuthenticated, (req, res) =>
+    res.render('home', {
+        name: req.user.name,
+        email: req.user.email
+
+    }));
+
 //Dashboard
-router.get('/dashboard', ensureAuthenticated, (req, res) => 
-res.render('dashboard', {
-    name: req.user.name,
-    email: req.user.email
-}));
+router.get('/dashboard', ensureAuthenticated, (req, res) =>
+    res.render('dashboard', {
+        name: req.user.name,
+        email: req.user.email
+    }));
 
 
 
-//stranka na vkladanie
-router.get('/uploads', (req, res) => res.render('uploads'));
+/* //stranka na vkladanie
+router.get('/uploads', (req, res) => res.render('uploads')); */
 
 
 const User = require('../models/User');
@@ -27,21 +41,155 @@ const User = require('../models/User');
 //vypis registrovanych
 router.get('/customers', ensureAuthenticated, (req, res) => {
     const email = req.user.email
-    if( email === process.env.ADMIN) {
-    User.find({}, function(err, users){
-        res.render('customers', {
-        userList: users
-    });
-});
-//neprehodi ma na /dashboard s err msg, ale ostane na /customers
+    if (email === process.env.ADMIN) {
+        User.find({}, function (err, users) {
+            res.render('customers', {
+                userList: users
+            });
+        });
+        //neprehodi ma na /dashboard s err msg, ale ostane na /customers
     } else {
         req.flash('error_msg', 'Nie si admin');
-        res.render('dashboard',{
-            name: req.user.name
+        res.render('dashboard', {
+            name: req.user.name,
+            email: req.user.email
         });
-       
-    };    
+
+    };
 })
+
+
+const url = require('../config/keys').MongoURI;
+const connect = mongoose.createConnection(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+
+let gfs;
+
+connect.once('open', () => {
+    // Init stream
+    gfs = Grid(connect.db, mongoose.mongo);
+    gfs.collection('uploads');
+});
+
+
+//storage engine
+const storage = new GridFsStorage({
+    url: url,
+    options: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    },
+    file: (req, file) => {
+        return new Promise((resolve, reject) => {
+            crypto.randomBytes(16, (err, buf) => {
+                if (err) {
+                    return reject(err);
+                }
+                const filename = buf.toString('hex') + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    bucketName: 'uploads'
+                };
+                resolve(fileInfo);
+            });
+        });
+    }
+});
+
+const upload = multer({ storage });
+
+//@route GET /uploads
+// Loads form
+router.get('/uploads', (req, res) => {
+    gfs.files.find().toArray((err, files) => {
+        //check if files exist
+        if (!files || files.length == 0) {
+            res.render('uploads', { files: false });
+        } else {
+            files.map(file => {
+                if (file.contentType === 'image/jpeg' || 
+                    file.contentType === 'image/png') 
+                    {
+                    file.isImage = true;
+                } else {
+                    file.isImage = false;
+                }
+            });
+            res.render('uploads', { files: files });
+        }
+    });
+});
+
+//@route POST /upload
+// Upload file to DB
+router.post('/upload', upload.single('file'), (req, res) => {
+    //res.json({file: req.file});
+    res.redirect('/uploads');
+});
+
+// @route get /files
+// Display all files in json
+router.get('/files', (req, res) => {
+    gfs.files.find().toArray((err, files) => {
+        //check if files exist
+        if (!files || files.length == 0) {
+            return res.status(404).json({
+                err: "No files exist"
+            })
+        }
+        // files exist
+        return res.json(files)
+    });
+});
+
+// @route get /files/:filename
+// Display single file object
+router.get('/files/:filename', (req, res) => {
+    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+        if (!file || file.length == 0) {
+            return res.status(404).json({
+                err: "No file exist"
+            })
+        }
+        //file exist
+        return res.json(file);
+    });
+});
+
+// @route get /image/:filename
+// Display image
+router.get('/image/:filename', (req, res) => {
+    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+        if (!file || file.length == 0) {
+            return res.status(404).json({
+                err: "No file exist"
+            })
+        }
+        // Check if Image
+        if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
+            // Read output to browser
+            const readstream = gfs.createReadStream(file.filename);
+            readstream.pipe(res);
+        } else {
+            res.status(404).json({
+                err: 'Not an image'
+            });
+        }
+    });
+});
+//@route delet / files /:id
+// Delete file
+router.delete ('/files/:id', (req,res) => {
+    gfs.remove({_id: req.params.id, root: 'uploads'}, (err, gridStore) => {
+        if(err){
+            return res.status(404).json({err:err});
+            }
+
+            res.redirect('/uploads')
+    })
+});
 
 
 /* router.get('/uploads', ensureAuthenticated, (req,res) => res.render('uploads', {
