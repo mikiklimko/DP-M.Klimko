@@ -102,11 +102,12 @@ const upload = multer({ storage });
 
 //@route GET /uploads
 // Loads form
-router.get('/uploads', (req, res) => {
+router.get('/uploads', ensureAuthenticated ,(req, res) => {
     gfs.files.find().toArray((err, files) => {
         //check if files exist
         if (!files || files.length == 0) {
-            res.render('uploads', { files: false });
+            res.render('uploads',  { files: false }, 
+             );
         } else {
             files.map(file => {
                 if (file.contentType === 'image/jpeg' || 
@@ -117,7 +118,7 @@ router.get('/uploads', (req, res) => {
                     file.isImage = false;
                 }
             });
-            res.render('uploads', { files: files });
+            res.render('uploads', { files: files },);
         }
     });
 });
@@ -127,6 +128,7 @@ router.get('/uploads', (req, res) => {
 router.post('/upload', upload.single('file'), (req, res) => {
     //res.json({file: req.file});
     res.redirect('/uploads');
+
 });
 
 // @route get /files
