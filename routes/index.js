@@ -83,17 +83,20 @@ const storage = new GridFsStorage({
     },
     file: (req, file) => {
         return new Promise((resolve, reject) => {
-            crypto.randomBytes(16, (err, buf) => {
-                if (err) {
-                    return reject(err);
-                }
-                const filename = buf.toString('hex') + path.extname(file.originalname);
+                
+                const filename =  file.originalname;
+
                 const fileInfo = {
                     filename: filename,
                     bucketName: 'uploads'
                 };
                 resolve(fileInfo);
-            });
+          
+           /*  const fileinfo = {
+                filename: new Date() + '-' + file.originalname,
+                bucketName: 'upload'
+            }
+            resolve(fileinfo) */
         });
     }
 });
@@ -103,6 +106,7 @@ const upload = multer({ storage });
 //@route GET /uploads
 // Loads form
 router.get('/uploads', ensureAuthenticated ,(req, res) => {
+    
     gfs.files.find().toArray((err, files) => {
         //check if files exist
         if (!files || files.length == 0) {
@@ -110,15 +114,15 @@ router.get('/uploads', ensureAuthenticated ,(req, res) => {
              );
         } else {
             files.map(file => {
-                if (file.contentType === 'image/jpeg' || 
-                    file.contentType === 'image/png') 
+                const imageType = ['image/png', 'image/jpg', 'image/gif', 'image/jpeg']
+                if (imageType.includes(file.connect)) 
                     {
                     file.isImage = true;
                 } else {
                     file.isImage = false;
                 }
             });
-            res.render('uploads', { files: files },);
+            res.render('uploads', { files: files, email: req.user.email },);
         }
     });
 });
@@ -150,7 +154,7 @@ router.get('/files', (req, res) => {
 // Display single file object
 router.get('/files/:filename', (req, res) => {
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-        if (!file || file.length == 0) {
+        if (!file) {
             return res.status(404).json({
                 err: "No file exist"
             })
@@ -160,17 +164,32 @@ router.get('/files/:filename', (req, res) => {
     });
 });
 
+//@route download / files /:id
+// download file
+router.get ('/download/:filename', (req,res) => {
+    gfs.files.findOne({filename: req.params.filename}, (err, file) => {
+        if(!file){
+            return res.status(404).json({err:err});
+            }
+            const readstream = gfs.createReadStream(file.filename);
+			readstream.pipe(res);   
+            
+    }) 
+});
+
+
 // @route get /image/:filename
 // Display image
 router.get('/image/:filename', (req, res) => {
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-        if (!file || file.length == 0) {
+        if (!file) {
             return res.status(404).json({
                 err: "No file exist"
             })
         }
         // Check if Image
-        if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
+        const imageType = ['image/png', 'image/jpg', 'image/gif', 'image/jpeg']
+        if (imageType.includes(file.connect)) {
             // Read output to browser
             const readstream = gfs.createReadStream(file.filename);
             readstream.pipe(res);
@@ -181,6 +200,9 @@ router.get('/image/:filename', (req, res) => {
         }
     });
 });
+
+
+
 //@route delet / files /:id
 // Delete file
 router.delete ('/files/:id', (req,res) => {
