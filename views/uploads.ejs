@@ -57,7 +57,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 m-auto">
-                <h1 class="text-center display-6">Nahravanie a stahovanie suborov:</h1>
+                <div class="card card-body mb-3">
+                <hr>
+                <h1 class="text-center display-6">Nahrávanie a sťahovanie súborov:</h1>
+                <hr>
+            </div>
                 <form action="/upload" method="POST" enctype="multipart/form-data">
                 <div class="custom-file mb-3">
                     <input type="file" name="file" id="file" class="custom-file-input">
@@ -75,7 +79,8 @@
                 </div> 
                 <input type="submit" value="Odoslat" class="btn btn-primary btn-block">
                 </form>
-                <p>*pre stiahnutie suboru kliknite na jeho nazov</p>
+                <hr>
+                <p class="w3-center"><b>Pre stiahnutie suboru kliknite na jeho nazov</b></p>
                 <hr>
                 <% if(files){ %>
                     <% files.forEach(function(file) { %>
@@ -85,7 +90,7 @@
                           <% } else { %>
                             
                             <a class= "w3-center"href="download/<%= file.filename %>"><b><%= file.filename %></b></a>
-                            
+                           
                               <% } %>
                               <% if (email===process.env.ADMIN ) { %>
                                 <form method="POST" action="/files/<%= file._id %>?_method=DELETE">
@@ -104,7 +109,7 @@
             </div>
         </div>
     </div>
-
+    
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
