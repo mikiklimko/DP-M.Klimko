@@ -37,7 +37,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/users/logout" class="btn btn-secondary">Odhlasenie</a>
+                    <a href="/users/logout" class="btn btn-secondary">Odhlásenie</a>
                 </li>
             </ul>
 
@@ -56,10 +56,10 @@
 
         <% if (email===process.env.ADMIN ) { %>
             <h1 class="display-3">ADMIN</h1>
-            <p>Pozriet si uzivatelov a ich poziadavky</p>
-            <a class="btn btn-primary btn-lg" href="customers" role="button">Uživatela</a>
+            <p>Pozrieť si užívateľov a ich požiadavky</p>
+            <a class="btn btn-primary btn-lg" href="customers" role="button">Užívateľa</a>
             <% } else { %>
-                <h1 class="display-3">Profil uzivatela</h1>
+                <h1 class="display-3">Profil používateľa</h1>
                 <p class="lead m-3">
                    <b><%= name %></b> 
                 </p>
@@ -75,6 +75,3 @@
 </body>
 
 </html>
-<!-- <h1 class="mt-4">Dashboard</h1>
-<p class="lead mb-3">Ahoj <%= name %></p> -->
-<!-- <a href="/users/logout" class="btn btn-secondary">Odhlasenie</a> -->

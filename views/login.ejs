@@ -15,7 +15,7 @@
       <ul class="navbar-nav  navbar-right">
           
           <li class="nav-item active">
-              <a class="nav-link" href="login"> <span class="fas fa-sign-in-alt"></span>Prihlasenie</a>
+              <a class="nav-link" href="login"> <span class="fas fa-sign-in-alt"></span>Prihlásenie</a>
           </li>
 
 
@@ -30,7 +30,7 @@
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
       <div class="card card-body">
-        <h1 class="text-center mb-3"><i class="fas fa-sign-in-alt"></i>  Prihlasenie</h1>
+        <h1 class="text-center mb-3"><i class="fas fa-sign-in-alt"></i>  Prihlásenie</h1>
         <%- include('./partials/messages.ejs'); -%>
         <form action="/users/login" method="POST">
           <div class="form-group">
@@ -53,10 +53,10 @@
               placeholder="Heslo"
             />
           </div>
-          <button type="submit" class="btn btn-primary btn-block">Prihlasit sa</button>
+          <button type="submit" class="btn btn-primary btn-block">Prihlásiť sa</button>
         </form>
         <p class="lead mt-4">
-         <b>Nemate este ucet?</b>  <a href="/users/register"><b>Registracia</b></a>
+         <b>Nemáte ešte účet?</b>  <a href="/users/register"><b>Zaregistrujte sa</b></a>
         </p>
       </div>
     </div>
