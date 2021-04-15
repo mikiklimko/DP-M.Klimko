@@ -37,6 +37,7 @@ router.get('/uploads', (req, res) => res.render('uploads')); */
 
 
 const User = require('../models/User');
+const Meta = require('../models/Meta');
 
 //vypis registrovanych
 router.get('/customers', ensureAuthenticated, (req, res) => {
@@ -47,7 +48,7 @@ router.get('/customers', ensureAuthenticated, (req, res) => {
                 userList: users
             });
         });
-        //neprehodi ma na /dashboard s err msg, ale ostane na /customers
+
     } else {
         req.flash('error_msg', 'Nie si admin');
         res.render('dashboard', {
@@ -83,20 +84,14 @@ const storage = new GridFsStorage({
     },
     file: (req, file) => {
         return new Promise((resolve, reject) => {
-                
-                const filename =  file.originalname;
-               
-                const fileInfo = {
-                    filename: filename,
-                    bucketName: 'uploads'
-                };
-                resolve(fileInfo);
-          
-           /*  const fileinfo = {
-                filename: new Date() + '-' + file.originalname,
-                bucketName: 'upload'
-            }
-            resolve(fileinfo) */
+
+            const filename = file.originalname;
+
+            const fileInfo = {
+                filename: filename,
+                bucketName: 'uploads'
+            };
+            resolve(fileInfo);
         });
     }
 });
@@ -105,34 +100,53 @@ const upload = multer({ storage });
 
 //@route GET /uploads
 // Loads form
-router.get('/uploads', ensureAuthenticated ,(req, res) => {
-    
+router.get('/uploads', ensureAuthenticated, (req, res) => {
+
     gfs.files.find().toArray((err, files) => {
         //check if files exist
         if (!files || files.length == 0) {
-            res.render('uploads',  { files: false }, 
-             );
+            res.render('uploads', { files: false },
+            );
         } else {
             files.map(file => {
                 const imageType = ['image/png', 'image/jpg', 'image/gif', 'image/jpeg']
-                if (imageType.includes(file.connect)) 
-                    {
+                if (imageType.includes(file.connect)) {
                     file.isImage = true;
                 } else {
                     file.isImage = false;
                 }
             });
+
+
             res.render('uploads', { files: files, email: req.user.email },);
         }
     });
 });
 
+
 //@route POST /upload
 // Upload file to DB
 router.post('/upload', upload.single('file'), (req, res) => {
-    //res.json({file: req.file});
-    res.redirect('/uploads');
+    const id = req.file.id;
+    console.log(id)
+    const abstrakt = req.body.abstrakt;
+    const keywords = req.body.keywords;
 
+    console.log(abstrakt);
+    console.log(keywords);
+
+   
+
+    gfs.files.findOne({ _id : id }, (err, file) => {
+        gfs.files.update(
+            {  _id : id  },
+            { $set: {abstrakt: abstrakt, keywords: keywords}}
+            )
+        if (err) throw err;
+            console.log("Doplnenie DB")
+    }); 
+
+    res.redirect('/uploads');
 });
 
 // @route get /files
@@ -166,15 +180,15 @@ router.get('/files/:filename', (req, res) => {
 
 //@route download / files /:id
 // download file
-router.get ('/download/:filename', (req,res) => {
-    gfs.files.findOne({filename: req.params.filename}, (err, file) => {
-        if(!file){
-            return res.status(404).json({err:err});
-            }
-            const readstream = gfs.createReadStream(file.filename);
-			readstream.pipe(res);   
-            
-    }) 
+router.get('/download/:filename', (req, res) => {
+    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+        if (!file) {
+            return res.status(404).json({ err: err });
+        }
+        const readstream = gfs.createReadStream(file.filename);
+        readstream.pipe(res);
+
+    })
 });
 
 
@@ -205,20 +219,17 @@ router.get('/image/:filename', (req, res) => {
 
 //@route delet / files /:id
 // Delete file
-router.delete ('/files/:id', (req,res) => {
-    gfs.remove({_id: req.params.id, root: 'uploads'}, (err, gridStore) => {
-        if(err){
-            return res.status(404).json({err:err});
-            }
+router.delete('/files/:id', (req, res) => {
+    gfs.remove({ _id: req.params.id, root: 'uploads' }, (err, gridStore) => {
+        if (err) {
+            return res.status(404).json({ err: err });
+        }
 
-            res.redirect('/uploads')
+        res.redirect('/uploads')
     })
 });
 
 
-/* router.get('/uploads', ensureAuthenticated, (req,res) => res.render('uploads', {
-    name: req.user.name
-})); */
 
 
 module.exports = router;

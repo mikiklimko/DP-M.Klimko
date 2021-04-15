@@ -16,11 +16,11 @@ router.get('/login', (req, res) => res.render('login'));
 //Registracia
 router.get('/register', (req, res) => res.render('register'));
 
-router.get('/form', ensureAuthenticated, (req, res) => 
-res.render('form', {
-    name: req.user.name,
-    email: req.user.email
-}));
+router.get('/form', ensureAuthenticated, (req, res) =>
+    res.render('form', {
+        name: req.user.name,
+        email: req.user.email
+    }));
 
 //Registracia Handle
 
@@ -70,13 +70,15 @@ router.post('/register', (req, res) => {
                         'process.env.RANDOM_TOKEN_SECRET',
                         { expiresIn: '24h' }
                     );
+
+                    
                     const newUser = new User({
                         name,
                         email,
                         password,
                         token,
                     });
-
+                    
                     //Hash hesla
                     bcrypt.genSalt(10, (err, salt) =>
                         bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -148,7 +150,7 @@ router.get('/verify', (req, res) => {
             console.log(user);
             if (user.email === decoded.email) {
                 // TODO decoded.exp aktualny cas(iat) > expirovany cas(exp) (pozor exp je asi v sec)
-
+                
                 // TODO setnut token ""
                 console.log("verifikujeme")
                 var filter = { email: user.email };
@@ -171,9 +173,119 @@ router.get('/verify', (req, res) => {
     req.flash('success_msg', 'Verifikoval si sa');
     res.redirect('/users/login')
 });
+//ODOSIELANIE EMAILU PRE OBNOVU HESLA
+router.post('/password', (req, res) => {
+    const { email } = req.body;
+    let errors = [];
+    //overenie zadanie emailu
+    if (!email) {
+        errors.push({ msg: 'Vyplnte e-mail!' });
+    }
+
+    if (errors.length > 0) {
+        res.render('password', {
+            errors,
+            email,
+        });
+
+    } else {
+        User.findOne({ email: email })
+            .then(user => {
+                if (user) {
+                    console.log(user);
+                    const token = user.token
+                    var transporter = nodemailer.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            user: process.env.LOG_EMAIL,
+                            pass: process.env.LOG_PASS
+                        }
+                    });
+
+                    var mailOptions = {
+                        from: 'dp.klimko@gmail.com',
+                        to: `${email}`,
+                        subject: 'OBNOVA HESLA',
+                        html: `<h1>ODOSLANE SPRAVNE</h1><br> <a href="http://localhost:5000/users/resetpass?key=${token}"> Pre obnovenie hesla `
+                    };
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                        }
+                    });
+                    console.log(email);
+
+                    req.flash('success_msg', 'Email bol poslany');
+                    res.redirect('/users/password');
+                }
+            })
+    }
+
+
+});
+
+router.get('/password', (req, res) => {
+    res.render('password')
+});
+
+//OBNOVA HESALA
+router.get('/resetpass', (req, res) => {
+    
+    const token = req.query.key;
+    var decoded = jwt.decode(token);
+    console.log(decoded);
+    
+    /* User.findOne({ token: token })
+    .then(user => {
+        console.log(user);
+        if (user.email === decoded.email) { 
+
+         }
+    }); */
+    res.render('resetpass', {email : decoded.email || "" })
+});
+
+
+//OBNOVA HESALA
+router.post('/resetpass', (req, res) => {
+    console.log(req.body)
+   
+        const { email } = req.body
+       User.findOne({ email: email })
+            .then(user => {              
+                if (user) {
+                    bcrypt.genSalt(10, (err,salt) => {
+                        bcrypt.hash(req.body.password, salt, (err,hash) =>{
+                            if(err) throw err;
+                            req.body.password = hash;
+                            console.log(req.body.password)
+                            var filter = {email : email }
+                            var update = { $set: { password : req.body.password } }
+                            User.updateOne(filter, update, (err, res) => {
+                                if (err) throw err;
+                                console.log("ZMENA PW")
+                                
+                            })
+                        })
+                        
+                    })
+                    
+                    res.send(200)
+                 } else {
+                     res.send(500)
+                 }
+
+            }); 
+        /*  };  */
+   
+});
+
+
 //Formular a aktualizacia DB
 router.post('/form', (req, res) => {
-    const { adresa, mesto, PSC, telefon, ubytovanie, strava } = req.body;  
+    const { adresa, mesto, PSC, telefon, ubytovanie, strava } = req.body;
     let errors = [];
     if (!adresa || !mesto || !PSC || !telefon) {
         errors.push({ msg: 'Vyplnte vsetky polia! ' });
@@ -187,23 +299,23 @@ router.post('/form', (req, res) => {
             telefon,
             ubytovanie,
             strava
-            });
+        });
     } else {
         const email = req.user.email;
         console.log(email);
-       var filter = {email : email}
-       var update = {$set :{ adresa: adresa, mesto: mesto, PSC: PSC, telefon: telefon, ubytovanie: ubytovanie, strava: strava}}
-        User.updateOne(filter, update, (err,res) => {
+        var filter = { email: email }
+        var update = { $set: { adresa: adresa, mesto: mesto, PSC: PSC, telefon: telefon, ubytovanie: ubytovanie, strava: strava } }
+        User.updateOne(filter, update, (err, res) => {
             if (err) throw err;
             console.log("Doplnenie DB")
         })
-       console.log(adresa,mesto,PSC,telefon,ubytovanie, strava);
+        console.log(adresa, mesto, PSC, telefon, ubytovanie, strava);
         req.flash('success_msg', 'Dakujeme za vyplnenie');
         res.redirect('/users/form')
-        }
+    }
 
 });
-//Vypisovanie ucastnikov
+
 
 
 

@@ -12,9 +12,9 @@
     <title>Miki Klimko</title>
     <style>
         img {
-          width: 100%;
+            width: 100%;
         }
-      </style>
+    </style>
 </head>
 
 <body>
@@ -43,7 +43,7 @@
                 <li>
                     <a href="/users/logout" class="btn btn-secondary">Odhlásenie</a>
                 </li>
-                
+
 
 
             </ul>
@@ -58,58 +58,66 @@
         <div class="row">
             <div class="col-md-6 m-auto">
                 <div class="card card-body mb-3">
-                <hr>
-                <h1 class="text-center display-6">Nahrávanie a sťahovanie súborov:</h1>
-                <hr>
-            </div>
-                <form action="/upload" method="POST" enctype="multipart/form-data">
-                <div class="custom-file mb-3">
-                    <input type="file" name="file" id="file" class="custom-file-input">
-                    <label for="file" class="custom-file-label">Vyberte subor</label>
+                    <hr>
+                    <h1 class="text-center display-6">Nahrávanie a sťahovanie súborov:</h1>
+                    <hr>
                 </div>
-               <div class="custom-text">
-                    <p class="display-8">Vlozte abstrakt:</p>
-                    <textarea type="abstrakt" name="abstrakt" id="abstrakt" cols="71" rows="2"></textarea>
+                <%- include('./partials/messages.ejs'); -%>
+                    <form action="/upload" method="POST" enctype="multipart/form-data">
+                        <div class="custom-file mb-3">
+                            <input type="file" name="file" id="file" class="custom-file-input">
+                            <label for="file" class="custom-file-label">Vyberte subor</label>
+                        </div>
+                        <div class="custom-text">
+                            <label for="abstrakt">Vložte abstrakt:</label>
+                            <textarea type="abstrakt" class="form-control" name="abstrakt" id="abstrakt" cols="71" rows="2"
+                                required></textarea>
 
-                </div>
-                <div class="custom-text">
-                    <p class="display-8">Klucove slova:</p>
-                    <textarea type="keyworlds" name="keyworlds" id="keyworlds" cols="71" rows="1"></textarea>
+                        </div>
+                        <div class="custom-text">
+                            <label for="keywords">Kľúčové slova:</label>
+                            <textarea type="keywords" name="keywords" id="keywords" cols="71" rows="1"
+                                required></textarea>
 
-                </div> 
-                <input type="submit" value="Odoslat" class="btn btn-primary btn-block">
-                </form>
-                <hr>
-                <p class="w3-center"><b>Pre stiahnutie suboru kliknite na jeho nazov</b></p>
-                <hr>
-                <% if(files){ %>
-                    <% files.forEach(function(file) { %>
-                      <div class="card card-body mb-3">
-                        <% if(file.isImage) { %>
-                          <img src="image/<%= file.filename %>" alt="">
-                          <% } else { %>
-                            
-                            <a class= "w3-center"href="download/<%= file.filename %>"><b><%= file.filename %></b></a>
-                           
-                              <% } %>
-                              <% if (email===process.env.ADMIN ) { %>
-                                <form method="POST" action="/files/<%= file._id %>?_method=DELETE">
-                                  <button class="btn btn-danger btn-block mt-4">Delete</button>
-                                </form>
-                                <% } else { %>
-                                    <% } %>
-                                <!-- <form method="GET" action="/files/<%= file._id %>?_method=DOWNLOAD">
+                        </div>
+                        <input type="submit" value="Odoslat" class="btn btn-primary btn-block">
+                    </form>
+                    <hr>
+                    <p class="w3-center"><b>Pre stiahnutie suboru kliknite na jeho nazov</b></p>
+                    <hr>
+                    <% if(files){ %>
+                        <% files.forEach(function(file) { %>
+                            <div class="card card-body mb-3">
+                                <% if(file.isImage) { %>
+                                    <img src="image/<%= file.filename %>" alt="">
+                                    <% } else { %>
+
+                                        <a class="w3-center" href="download/<%= file.filename %>"><b>
+                                                <%= file.filename %>
+                                            </b></a>
+                                         
+                                        <label class="custom-text"><b>Abstrakt:</b> <%= file.abstrakt %></label>
+                                        <label class="custom-text"><b>Kľúčové slova:</b> <%= file.keywords %></label> 
+                                        
+                                        <% } %>
+                                            <% if (email===process.env.ADMIN ) { %>
+                                                <form method="POST" action="/files/<%= file._id %>?_method=DELETE">
+                                                    <button class="btn btn-danger btn-block mt-4">Delete</button>
+                                                </form>
+                                                <% } else { %>
+                                                    <% } %>
+                                                        <!-- <form method="GET" action="/files/<%= file._id %>?_method=DOWNLOAD">
                                     <button class="btn btn-danger btn-block mt-4">Stiahnut</button>
                                   </form> -->
-                      </div>
-                      <% }) %>
-                        <% } else { %>
-                          <p class="w3-center">Nie su nahrané zaiadne súbory</p>
-                          <% } %>
+                            </div>
+                            <% }) %>
+                                <% } else { %>
+                                    <p class="w3-center">Nie su nahrané zaiadne súbory</p>
+                                    <% } %>
             </div>
         </div>
     </div>
-    
+
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"

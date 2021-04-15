@@ -8,6 +8,7 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 
 
+
 const app = express();
 
 //Passport konfik
@@ -23,7 +24,8 @@ mongoose.connect  (db, {  useNewUrlParser: true, useUnifiedTopology: true})
     .catch(err => console.log(err));
 
 //EJS
-/* app.use(bodyParser.json());*/
+app.use(express.urlencoded());
+app.use(express.json());
 app.use(methodOverride('_method')); 
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
