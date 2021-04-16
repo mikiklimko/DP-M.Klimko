@@ -37,7 +37,7 @@ router.get('/uploads', (req, res) => res.render('uploads')); */
 
 
 const User = require('../models/User');
-const Meta = require('../models/Meta');
+
 
 //vypis registrovanych
 router.get('/customers', ensureAuthenticated, (req, res) => {
