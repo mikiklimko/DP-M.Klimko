@@ -7,8 +7,6 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
 
-
-
 const app = express();
 
 //Passport konfik

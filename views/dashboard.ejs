@@ -48,17 +48,16 @@
     <br>
 
     <div class="jumbotron">
-
-
-
         <% if (email===process.env.ADMIN ) { %>
             <h1 class="display-3">ADMIN</h1>
-            <p>Pozrieť si užívateľov a ich požiadavky</p>
-            <a class="btn btn-primary btn-lg" href="customers" role="button">Užívateľa</a>
+            <p>Pozrieť si zaregistrovaných a ich požiadavky:</p>
+            <a class="btn btn-primary btn-lg" href="customers" role="button">Zoznam</a>
             <% } else { %>
                 <h1 class="display-3">Profil používateľa</h1>
                 <p class="lead m-3">
-                   <b><%= name %></b> 
+                    <b>
+                        <%= name %>
+                    </b>
                 </p>
                 <hr class="my-4">
                 <p>Vyber si stravu a ubytovanie:</p>

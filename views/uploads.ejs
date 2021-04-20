@@ -70,8 +70,8 @@
                         </div>
                         <div class="custom-text">
                             <label for="abstrakt">Vložte abstrakt:</label>
-                            <textarea type="abstrakt" class="form-control" name="abstrakt" id="abstrakt" cols="71" rows="2"
-                                required></textarea>
+                            <textarea type="abstrakt" class="form-control" name="abstrakt" id="abstrakt" cols="71"
+                                rows="2" required></textarea>
 
                         </div>
                         <div class="custom-text">
@@ -91,14 +91,18 @@
                                 <% if(file.isImage) { %>
                                     <img src="image/<%= file.filename %>" alt="">
                                     <% } else { %>
-
                                         <a class="w3-center" href="download/<%= file.filename %>"><b>
                                                 <%= file.filename %>
                                             </b></a>
-                                         
-                                        <label class="custom-text"><b>Abstrakt:</b> <%= file.abstrakt %></label>
-                                        <label class="custom-text"><b>Kľúčové slova:</b> <%= file.keywords %></label> 
-                                        
+                                        <br>
+                                        <br>
+                                        <label class="custom-text"><b>Abstrakt:</b>
+                                            <%= file.abstrakt %>
+                                        </label>
+                                        <hr>
+                                        <label class="custom-text"><b>Kľúčové slova:</b>
+                                            <%= file.keywords %>
+                                        </label>
                                         <% } %>
                                             <% if (email===process.env.ADMIN ) { %>
                                                 <form method="POST" action="/files/<%= file._id %>?_method=DELETE">
@@ -106,9 +110,6 @@
                                                 </form>
                                                 <% } else { %>
                                                     <% } %>
-                                                        <!-- <form method="GET" action="/files/<%= file._id %>?_method=DOWNLOAD">
-                                    <button class="btn btn-danger btn-block mt-4">Stiahnut</button>
-                                  </form> -->
                             </div>
                             <% }) %>
                                 <% } else { %>

@@ -11,8 +11,6 @@ const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
 
 
-
-
 //Uvitacia strana
 router.get('/', (req, res) => res.render('Welcome'));
 
@@ -67,13 +65,11 @@ const connect = mongoose.createConnection(url, {
 });
 
 let gfs;
-
 connect.once('open', () => {
     // Init stream
     gfs = Grid(connect.db, mongoose.mongo);
     gfs.collection('uploads');
 });
-
 
 //storage engine
 const storage = new GridFsStorage({
@@ -84,9 +80,7 @@ const storage = new GridFsStorage({
     },
     file: (req, file) => {
         return new Promise((resolve, reject) => {
-
             const filename = file.originalname;
-
             const fileInfo = {
                 filename: filename,
                 bucketName: 'uploads'
@@ -95,13 +89,11 @@ const storage = new GridFsStorage({
         });
     }
 });
-
 const upload = multer({ storage });
 
 //@route GET /uploads
 // Loads form
 router.get('/uploads', ensureAuthenticated, (req, res) => {
-
     gfs.files.find().toArray((err, files) => {
         //check if files exist
         if (!files || files.length == 0) {
@@ -116,8 +108,6 @@ router.get('/uploads', ensureAuthenticated, (req, res) => {
                     file.isImage = false;
                 }
             });
-
-
             res.render('uploads', { files: files, email: req.user.email },);
         }
     });
@@ -135,16 +125,14 @@ router.post('/upload', upload.single('file'), (req, res) => {
     console.log(abstrakt);
     console.log(keywords);
 
-   
-
-    gfs.files.findOne({ _id : id }, (err, file) => {
+    gfs.files.findOne({ _id: id }, (err, file) => {
         gfs.files.update(
-            {  _id : id  },
-            { $set: {abstrakt: abstrakt, keywords: keywords}}
-            )
+            { _id: id },
+            { $set: { abstrakt: abstrakt, keywords: keywords } }
+        )
         if (err) throw err;
-            console.log("Doplnenie DB")
-    }); 
+        console.log("Doplnenie DB")
+    });
 
     res.redirect('/uploads');
 });
@@ -156,7 +144,7 @@ router.get('/files', (req, res) => {
         //check if files exist
         if (!files || files.length == 0) {
             return res.status(404).json({
-                err: "No files exist"
+                err: "Ziaden subor"
             })
         }
         // files exist
@@ -170,7 +158,7 @@ router.get('/files/:filename', (req, res) => {
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
         if (!file) {
             return res.status(404).json({
-                err: "No file exist"
+                err: "Ziaden subor"
             })
         }
         //file exist
@@ -198,7 +186,7 @@ router.get('/image/:filename', (req, res) => {
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
         if (!file) {
             return res.status(404).json({
-                err: "No file exist"
+                err: "Ziaden subor"
             })
         }
         // Check if Image
@@ -209,7 +197,7 @@ router.get('/image/:filename', (req, res) => {
             readstream.pipe(res);
         } else {
             res.status(404).json({
-                err: 'Not an image'
+                err: 'Bez obrázka'
             });
         }
     });
@@ -228,8 +216,5 @@ router.delete('/files/:id', (req, res) => {
         res.redirect('/uploads')
     })
 });
-
-
-
 
 module.exports = router;
