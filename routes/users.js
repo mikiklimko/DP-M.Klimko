@@ -235,14 +235,6 @@ router.get('/resetpass', (req, res) => {
     const token = req.query.key;
     var decoded = jwt.decode(token);
     console.log(decoded);
-
-    /* User.findOne({ token: token })
-    .then(user => {
-        console.log(user);
-        if (user.email === decoded.email) { 
-
-         }
-    }); */
     res.render('resetpass', { email: decoded.email || "" })
 });
 
@@ -250,7 +242,6 @@ router.get('/resetpass', (req, res) => {
 //OBNOVA HESALA
 router.post('/resetpass', (req, res) => {
     console.log(req.body)
-
     const { email } = req.body
     User.findOne({ email: email })
         .then(user => {
@@ -264,22 +255,17 @@ router.post('/resetpass', (req, res) => {
                         var update = { $set: { password: req.body.password } }
                         User.updateOne(filter, update, (err, res) => {
                             if (err) throw err;
-                            console.log("ZMENA PW")
-
+                            console.log("ZMENA Hesla prebehla")
                         })
                     })
-
                 })
-
                 res.send(200)
             } else {
                 res.send(500)
             }
 
         });
-    /*  };  */
-
-});
+   });
 
 
 //Formular a aktualizacia DB
