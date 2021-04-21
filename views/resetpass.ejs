@@ -78,7 +78,6 @@
     </div>
   </div>
   <script>
-
     const form = document.getElementById('resetpass');
     form.addEventListener('submit', function (event) {
 
@@ -97,7 +96,7 @@
     /* sprava */
     //overenie vyplnenia
     const password = document.querySelector('input[name=password]');
-      const confirm = document.querySelector('input[name=password2]');
+    const confirm = document.querySelector('input[name=password2]');
     function onChange() {
       
       if (confirm.value === password.value) {
@@ -110,7 +109,6 @@
     const errorElement = document.getElementById('error')
 
     form.addEventListener("submit", (e) => {
-
       e.preventDefault();
       alert("Heslo bolo zmenené môžete sa prihlásiť!")
     });

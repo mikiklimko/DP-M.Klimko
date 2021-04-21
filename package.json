@@ -1,7 +1,7 @@
 {
-  "name": "user-reg",
+  "name": "dp-klimko",
   "version": "1.0.0",
-  "description": "",
+  "description": "Conference website",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js"
@@ -10,7 +10,14 @@
     "type": "git",
     "url": "git+https://github.com/mikiklimko/user-reg.git"
   },
-  "author": "Miki Klimko",
+  "keywords":[
+    "conference",
+    "register",
+    "login",
+    "MongoDB",
+    "gfs-stream"
+  ],
+  "author": "Mikulas Klimko",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mikiklimko/user-reg/issues"
