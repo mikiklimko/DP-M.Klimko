@@ -54,8 +54,9 @@ router.post('/register', (req, res) => {
         User.findOne({ email: email })
             .then(user => {
                 if (user) {
-                    //existujuci uzivatel
-                    error.push({ msg: 'Email je už registrovaný' })
+                    
+                    console.log(email)
+                    errors.push({ msg: 'Email je už registrovaný' });
                     res.render('register', {
                         errors,
                         name,
@@ -69,8 +70,6 @@ router.post('/register', (req, res) => {
                         'process.env.RANDOM_TOKEN_SECRET',
                         { expiresIn: '24h' }
                     );
-
-
                     const newUser = new User({
                         name,
                         email,
