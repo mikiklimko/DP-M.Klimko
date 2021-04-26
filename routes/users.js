@@ -100,14 +100,17 @@ router.post('/register', (req, res) => {
                         auth: {
                             user: process.env.LOG_EMAIL,
                             pass: process.env.LOG_PASS
-                        }
+                        },
+                        tls: {
+                            rejectUnauthorized: false
+                          }
                     });
                     console.log(transporter)
                     var mailOptions = {
                         from: 'dp.klimko@gmail.com',
                         to: `${email}`,
                         subject: 'Overenie emailu',
-                        html: `<h1>ODOSLANE SPRAVNE</h1><br> <a href="http://localhost:5000/users/verify?key=${token}"> Pre overenie klikni `
+                        html: `<h1>Pre overenie konta kliknite na link:</h1><br> <a href="http://localhost:5000/users/verify?key=${token}"> Overenie účtu `
                     };
                     transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
@@ -197,14 +200,17 @@ router.post('/password', (req, res) => {
                         auth: {
                             user: process.env.LOG_EMAIL,
                             pass: process.env.LOG_PASS
-                        }
+                        },
+                        tls: {
+                            rejectUnauthorized: false
+                          }
                     });
 
                     var mailOptions = {
                         from: 'dp.klimko@gmail.com',
                         to: `${email}`,
                         subject: 'OBNOVA HESLA',
-                        html: `<h1>ODOSLANE SPRAVNE</h1><br> <a href="http://localhost:5000/users/resetpass?key=${token}"> Pre obnovenie hesla `
+                        html: `<h1>Pre obnovenie hesla kliknite na link:</h1><br> <a href="http://localhost:5000/users/resetpass?key=${token}"> Obnova hesla `
                     };
                     transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {

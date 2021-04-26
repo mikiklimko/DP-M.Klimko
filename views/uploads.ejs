@@ -75,7 +75,7 @@
 
                         </div>
                         <div class="custom-text">
-                            <label for="keywords">Kľúčové slova:</label>
+                            <label for="keywords">Vložte kľúčové slova:</label>
                             <textarea type="keywords" name="keywords" id="keywords" cols="71" rows="1"
                                 required></textarea>
 
@@ -106,7 +106,7 @@
                                         <% } %>
                                             <% if (email===process.env.ADMIN ) { %>
                                                 <form method="POST" action="/files/<%= file._id %>?_method=DELETE">
-                                                    <button class="btn btn-danger btn-block mt-4">Delete</button>
+                                                    <button class="btn btn-danger btn-block mt-4">Vymazať</button>
                                                 </form>
                                                 <% } else { %>
                                                     <% } %>
