@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Conference website",
   "main": "app.js",
-
+  "scripts": {
+    "start": "nodemon app.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mikiklimko/DP-M.Klimko.git"
