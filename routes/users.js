@@ -19,7 +19,14 @@ router.get('/register', (req, res) => res.render('register'));
 router.get('/form', ensureAuthenticated, (req, res) =>
     res.render('form', {
         name: req.user.name,
-        email: req.user.email
+        email: req.user.email,
+        adresa: req.user.adresa,
+        mesto: req.user.mesto,
+        PSC: req.user.PSC,
+        telefon: req.user.telefon,
+        ubytovanie: req.user.ubytovanie,
+        strava: req.user.strava
+ 
     }));
 
 //Registracia Handle
